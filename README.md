@@ -5,3 +5,4 @@ http://code4ct.codespace.co.za/api/v1/quiz/33
 
 And send answers http://code4ct.codespace.co.za/api/v1/quiz/33/answer
 
+I had created the quiz questions in questions.json 
