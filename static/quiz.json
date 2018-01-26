@@ -1,0 +1,68 @@
+[{
+status: "success",
+status_code: 200,
+message: "Record Found",
+quiz: {
+id: 33,
+name: "Aptitude Test",
+questions: [
+[
+{
+id: 365,
+question: "First Question",
+image: "http://code4ct.codespace.co.za/storage/uploads/quiz/33/questions/365.jpeg",
+answers: [
+[
+{
+id: 1271,
+answer: "Answer 1"
+},
+{
+id: 1272,
+answer: "Answer 2"
+},
+{
+id: 1273,
+answer: "Answer 3"
+}
+]
+]
+},
+{
+id: 366,
+question: "Question 2 No Image",
+image: null,
+answers: [
+[
+{
+id: 1274,
+answer: "Answer 1"
+},
+{
+id: 1275,
+answer: "Answer 2"
+}
+]
+]
+},
+{
+id: 367,
+question: "Question 3",
+image: "http://code4ct.codespace.co.za/storage/uploads/quiz/33/questions/367.jpeg",
+answers: [
+[
+{
+id: 1276,
+answer: "Answer 1"
+},
+{
+id: 1277,
+answer: "Answer 2"
+}
+]
+]
+}
+]
+]
+}
+}]
