@@ -37,7 +37,7 @@ export default {
     },
 
     storeChoice (a) {
-      this.$emit('answerStored', a)
+      this.$emit('answerStored',this.question, a)
     }
   }
 }

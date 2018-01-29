@@ -27,11 +27,10 @@
             <input type="number" class="height form-control" placeholder="mobile" v-model="mobile" v-validate="'required'" name="mobile" :class="{'form-control': true, 'error': errors.has('mobile') }" />
             <span class="small text-danger" v-show="errors.has('mobile')">Mobile is required</span>
           </div>
-
+        </div>
       </form>
     </div>
     <button @click="loadQuestion"><span>Submit & Start</span></button>
-  </div>
 </div>
 </template>
 
@@ -76,37 +75,13 @@ export default {
   },
 
   methods: {
-
-    loadQuestion (){
-    axios.post('http://code4ct.codespace.co.za/api/v1/quiz/33/answer', {
-    name: this.name,
-    email: this.email
-  }
-  .then(response => {
-      this.name = response.data.name;
-      this.lname = response.data.lname;
-      this.email = response.data.email;
-      this.mobile = response.data.mobile;
-  }),
-  this.$validator.validateAll().then((result) => {
-      if (result) {
-          //validation passed succesfully
-          //alert('Form validated succesfully');
-          // push to the new route
-          this.$emit('buttonClicked')
-
-      } else {
-          alert('One or two fields were not validated succesfully');
-      }
-  })
-  .catch((error)=>{
-          alert('One or two fields were not validated succesfully');
-
-}),
-
-
     loadQuestion () {
-      this.$emit('buttonClicked')
+      this.$emit('buttonClicked', {
+        name : this.name,
+        lname: this.lname,
+        email: this.email,
+        mobile: this.mobile
+      })
     }
     //startCountdown () {
     //  this.$emit('buttonClicked')

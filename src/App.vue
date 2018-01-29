@@ -35,14 +35,15 @@ export default {
       resultKeys: [],
       picture: null,
       address: null,
-      description: null
+      description: null,
+      userInfo: null
     }
   },
 
   mounted () {
     console.log('App -> mounted.')
     // axios.get('http://code4ct.codespace.co.za/api/v1/quiz/33')
-    axios.get('http://localhost:8080/static/quiz.json')
+    axios.get('http://code4ct.codespace.co.za/api/v1/quiz/33')
       .then((response) => {
         var res = response.data;
         this.questions = res.quiz.questions[0];
@@ -58,24 +59,27 @@ export default {
   },
 
   methods: {
-    calculateResult(){
-      console.log('App -> mounted.')
-        //var answer = this; //----the script I have to add
-    axios.post('http://code4ct.codespace.co.za/api/v1/quiz/33/answer', {
-  answer: this.answer_id,
-})
-.then((response) => {
-  var res = response.data;
-  this.answers = res.quiz.answers[0];
-  this.showResult = true
+  calculateResult(){ 
+      var params = new URLSearchParams();
+      params.append('name', this.userInfo.name);
+      params.append('lname', this.userInfo.lname);
+      params.append('mobile', this.userInfo.mobile);
+      params.append('email', this.userInfo.email);
+      //todo add other fields
+  debugger
+      //etc
+      for(var i in this.responses)
+        params.append('answers[' + this.responses[i].question.id + '][answer]', this.responses[i].answer.id);//might need more info
 
-})
+      axios.post('http://code4ct.codespace.co.za/api/v1/quiz/33/answer', params).then( x => {
+        //do something
+      });
+    },
 
-},
 
-
-    handleClick () {  // triggers after "Take the quiz" button is clicked
+    handleClick (userInfo) {  // triggers after "Take the quiz" button is clicked
       console.log('App -> button clicked.')
+      this.userInfo = userInfo;
       this.questionTime = true
       this.currentQuestion = this.questions[this.questionIndex]
     },
@@ -88,12 +92,15 @@ export default {
       this.currentQuestion = this.questions[this.questionIndex]
     },
 
-    nextQuestion (a) {  // triggers when an answer choice is clicked
+    nextQuestion (q, a) {  // triggers when an answer choice is clicked
       console.log('App -> nextQuestionClicked')
-      this.responses.push(a)
+      this.responses.push({
+        question: q,
+        answer: a
+      });
       this.resultKeys.push(a.id) // resultKeys stores the first letter of each answer choice
       this.questionIndex++
-      if (this.questionIndex ===20 ) { // shows Result component after all question
+      if (this.questionIndex == this.questions.length ) { // shows Result component after all question
         this.calculateResult()
       }
       this.currentQuestion = this.questions[this.questionIndex]
