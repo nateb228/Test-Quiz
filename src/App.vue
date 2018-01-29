@@ -8,6 +8,7 @@
       <!-- <transition-group name="slide"> -->
         <Question @backClicked="goBack" @answerStored="nextQuestion" v-show="questionTime" v-if="currentQuestion === question" v-for="(question, index) in questions" v-bind:key="index" :question="question" :index="index"></Question>
       <!-- <transition-group> -->
+
         <Result v-show="showResult" :picture="this.picture" :address="this.address" :description="this.description"></Result>
     </div>
   </div>
@@ -18,7 +19,7 @@ import axios from 'axios'
 import Hello from './components/Hello'
 import Question from './components/Question'
 import Result from './components/Result'
-
+/* eslint-disable */
 export default {
   name: 'app',
 
@@ -26,6 +27,7 @@ export default {
     return {
       questionTime: false, // activates after homepage
       questions: [],
+      answers:[],
       currentQuestion: null,
       questionIndex: 0,
       showResult: false,
@@ -39,11 +41,15 @@ export default {
 
   mounted () {
     console.log('App -> mounted.')
-    axios.get('static/quiz.json')
+    // axios.get('http://code4ct.codespace.co.za/api/v1/quiz/33')
+    axios.get('http://localhost:8080/static/quiz.json')
       .then((response) => {
-        this.questions = response.data
+        var res = response.data;
+        this.questions = res.quiz.questions[0];
       })
+
   },
+
 
   components: {
     Hello,
@@ -52,6 +58,22 @@ export default {
   },
 
   methods: {
+    calculateResult(){
+      console.log('App -> mounted.')
+        //var answer = this; //----the script I have to add
+    axios.post('http://code4ct.codespace.co.za/api/v1/quiz/33/answer', {
+  answer: this.answer_id,
+})
+.then((response) => {
+  var res = response.data;
+  this.answers = res.quiz.answers[0];
+  this.showResult = true
+
+})
+
+},
+
+
     handleClick () {  // triggers after "Take the quiz" button is clicked
       console.log('App -> button clicked.')
       this.questionTime = true
@@ -69,11 +91,10 @@ export default {
     nextQuestion (a) {  // triggers when an answer choice is clicked
       console.log('App -> nextQuestionClicked')
       this.responses.push(a)
-      this.resultKeys.push(a.charAt(0)) // resultKeys stores the first letter of each answer choice
+      this.resultKeys.push(a.id) // resultKeys stores the first letter of each answer choice
       this.questionIndex++
-      if (this.questionIndex === 9) { // shows Result component after question 9
+      if (this.questionIndex ===20 ) { // shows Result component after all question
         this.calculateResult()
-        this.showResult = true
       }
       this.currentQuestion = this.questions[this.questionIndex]
     }
@@ -100,7 +121,7 @@ export default {
 
 #panel{
   background: rgba(255, 255, 255, 0.6);
-  height: 80vh;
+  height: 90vh;
   width: 70vw;
   display: flex;
   flex-direction: column;
